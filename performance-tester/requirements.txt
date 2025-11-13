@@ -32,7 +32,6 @@ pytz==2023.3
 
 # WebSocket
 python-socketio==5.10.0
-eventlet==0.33.3
 
 # Report Generation
 jinja2==3.1.2
