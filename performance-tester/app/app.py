@@ -18,7 +18,12 @@ from .report_generator import ReportGenerator
 
 
 # Initialize Flask app
-app = Flask(__name__)
+# Fix template and static folder paths (they are in parent directory)
+BASE_DIR = Path(__file__).parent.parent
+app = Flask(__name__,
+    template_folder=str(BASE_DIR / 'templates'),
+    static_folder=str(BASE_DIR / 'static')
+)
 settings = get_settings()
 app.config['SECRET_KEY'] = settings.SECRET_KEY
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
