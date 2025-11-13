@@ -60,7 +60,7 @@ class Settings(BaseSettings):
     FLASK_DEBUG: bool = False
     SECRET_KEY: str = Field(default="dev-secret-key-change-in-production", env="SECRET_KEY")
 
-    # Test scenarios
+    # Test scenarios - OPTIMIZED for 8 vCPU / 24GB RAM / 400GB SSD / 600 Mbit/s
     TEST_SCENARIOS: Dict[str, Dict[str, Any]] = {
         "quick": {
             "name": "Quick Test",
@@ -97,6 +97,52 @@ class Settings(BaseSettings):
             "duration": 3600,
             "users": 50,
             "description": "Long-running test to check stability"
+        },
+        # NEW: Advanced scenarios for 8 vCPU / 600 Mbit/s
+        "burst_100": {
+            "name": "Burst Test - 100 RPS",
+            "duration": 60,
+            "users": 100,
+            "burst_size": 100,
+            "num_bursts": 5,
+            "burst_delay": 10,
+            "description": "5 bursts of 100 requests, 10s apart - tests peak capacity"
+        },
+        "burst_200": {
+            "name": "Burst Test - 200 RPS",
+            "duration": 120,
+            "users": 200,
+            "burst_size": 200,
+            "num_bursts": 3,
+            "burst_delay": 20,
+            "description": "3 bursts of 200 requests - stress test for 8 vCPU"
+        },
+        "extreme_500": {
+            "name": "Extreme Load - 500 RPS",
+            "duration": 180,
+            "users": 500,
+            "description": "500 concurrent requests - MAXIMUM LOAD for 600 Mbit/s"
+        },
+        "http2_ultra": {
+            "name": "HTTP/2 Ultra Fast",
+            "duration": 300,
+            "users": 300,
+            "description": "HTTP/2 test - 300 requests for maximum throughput"
+        },
+        "sustained_high": {
+            "name": "Sustained High Load",
+            "duration": 600,
+            "users": 150,
+            "description": "10 min sustained high load - 150 concurrent users"
+        },
+        "mega_burst": {
+            "name": "MEGA Burst - Max Speed",
+            "duration": 300,
+            "users": 500,
+            "burst_size": 500,
+            "num_bursts": 10,
+            "burst_delay": 15,
+            "description": "🚀 MEGA TEST: 10 bursts of 500 requests - ULTIMATE STRESS"
         }
     }
 
