@@ -10,6 +10,7 @@ import config
 from models import OfertaRequest, OfertaResponse
 from document_service import DocumentService
 from conversion_service import ConversionService
+import traceback
 
 
 # Inicjalizacja serwis�w przy starcie aplikacji
@@ -134,6 +135,9 @@ async def generate_offer(request: OfertaRequest):
         )
 
     except Exception as e:
+        # Detailed logging
+        print(f"ERROR in generate_offer: {str(e)}")
+        print(f"Traceback: {traceback.format_exc()}")
         # ObsBuga bBd�w
         processing_time = time.time() - start_time
         raise HTTPException(
@@ -195,6 +199,9 @@ async def list_produkty():
             "produkty": produkty_files
         }
     except Exception as e:
+        # Detailed logging
+        print(f"ERROR in generate_offer: {str(e)}")
+        print(f"Traceback: {traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=f"BBd odczytu katalogu produkt�w: {str(e)}")
 
 
