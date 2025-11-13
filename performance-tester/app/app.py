@@ -233,7 +233,7 @@ def run_test(test_run_id: int, test_type: str, config: dict, endpoint_type: str)
             'config': config
         })
 
-        # Run test based on type
+        # Run test based on type - ENHANCED with burst and HTTP/2
         if test_type == 'concurrent':
             summary = load_tester.run_concurrent_test(
                 num_requests=config['num_requests'],
@@ -250,6 +250,23 @@ def run_test(test_run_id: int, test_type: str, config: dict, endpoint_type: str)
                 max_users=config['num_requests'],
                 ramp_duration=60,
                 test_duration=config['duration'],
+                endpoint_type=endpoint_type
+            )
+        elif test_type == 'burst':
+            # NEW: Burst test for maximum speed
+            burst_size = config.get('burst_size', 100)
+            num_bursts = config.get('num_bursts', 1)
+            burst_delay = config.get('burst_delay', 1.0)
+            summary = load_tester.run_burst_test(
+                burst_size=burst_size,
+                num_bursts=num_bursts,
+                burst_delay=burst_delay,
+                endpoint_type=endpoint_type
+            )
+        elif test_type == 'http2':
+            # NEW: HTTP/2 test for modern servers
+            summary = load_tester.run_http2_test(
+                num_requests=config['num_requests'],
                 endpoint_type=endpoint_type
             )
         else:
@@ -269,7 +286,7 @@ def run_test(test_run_id: int, test_type: str, config: dict, endpoint_type: str)
                 'response_size': result.response_size
             })
 
-        # Update test run with summary
+        # Update test run with summary - ENHANCED with new metrics
         db.update_test_run(test_run_id, {
             'total_requests': summary.total_requests,
             'successful_requests': summary.successful_requests,
@@ -279,10 +296,17 @@ def run_test(test_run_id: int, test_type: str, config: dict, endpoint_type: str)
             'min_response_time': summary.min_response_time,
             'max_response_time': summary.max_response_time,
             'p50_response_time': summary.p50_response_time,
+            'p75_response_time': summary.p75_response_time,
+            'p90_response_time': summary.p90_response_time,
             'p95_response_time': summary.p95_response_time,
             'p99_response_time': summary.p99_response_time,
+            'p999_response_time': summary.p999_response_time,
             'requests_per_second': summary.requests_per_second,
             'errors_per_second': summary.errors_per_second,
+            'throughput_mbps': summary.throughput_mbps,
+            'total_bytes_sent': summary.total_bytes_sent,
+            'total_bytes_received': summary.total_bytes_received,
+            'std_dev_response_time': summary.std_dev_response_time,
             'status': 'completed'
         })
 
