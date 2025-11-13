@@ -190,7 +190,7 @@ class SystemMonitor:
             load_1min = load_5min = load_15min = 0
 
         return {
-            'timestamp': datetime.now(),
+            'timestamp': datetime.now().isoformat(),  # Convert to ISO string for JSON serialization
             # CPU metrics - ENHANCED
             'cpu_percent': cpu_percent,
             'cpu_per_core': cpu_per_core,  # NEW: List of per-core usage
