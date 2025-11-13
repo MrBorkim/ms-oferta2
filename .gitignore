@@ -1,3 +1,8 @@
 __pycache__/
 *.pyc
 *.pyo
+output/
+performance-tester/database/
+performance-tester/logs/
+performance-tester/reports/
+performance-tester/venv/
